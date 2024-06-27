@@ -28,3 +28,31 @@ variable "policy" {
   })
   default = null
 }
+
+variable "force_destroy" {
+  description = "Whether to force destroy the bucket"
+  type        = bool
+  default     = false
+}
+
+variable "versioning" {
+  description = "Map containing versioning configuration"
+
+  type = object({
+    expected_bucket_owner = optional(string)
+    status                = optional(string)
+    mfa                   = optional(string)
+    mfa_delete            = optional(string)
+
+  })
+
+  nullable = true
+  default  = {}
+
+  validation {
+    condition     = var.versioning.status != null ? contains(["Enabled", "Suspended", "Disabled"], var.versioning.status) : true
+    error_message = "Allowed values for versioning.status are \"Enabled\", \"Suspended\", \"Disabled\"."
+  }
+}
+
+
