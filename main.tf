@@ -92,3 +92,12 @@ resource "aws_s3_bucket_website_configuration" "this" {
     }
   }
 }
+
+
+module "objects" {
+  source = "./modules/object"
+
+  bucket     = aws_s3_bucket.this.bucket
+  filepath   = var.filepath
+  key_prefix = var.key_prefix
+}
